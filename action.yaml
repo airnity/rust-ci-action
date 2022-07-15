@@ -64,9 +64,3 @@ runs:
     run: cargo test  --verbose  ${{ steps.parameter.outputs.PARAMETER }} -- --test-threads 1
     shell: bash
     working-directory: ${{ inputs.working-directory }}
-      
-  - name: bench code
-    run: cargo bench  --verbose
-    shell: bash
-    working-directory: ${{ inputs.working-directory }}
-  
