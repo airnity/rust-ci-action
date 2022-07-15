@@ -32,9 +32,9 @@ runs:
     shell: bash
     run: |
       if [ ${{ inputs.release }} == "True"]; then
-        echo " --release"
+        echo "::set-output name=PARAMETER:: --release"
       else
-        echo ""
+        echo "::set-output name=PARAMETER:: "
       fi
     id: parameter
     
@@ -54,12 +54,12 @@ runs:
     working-directory: ${{ inputs.working-directory }}
 
   - name: build code
-    run: cargo build ${{ id.parameter }}
+    run: cargo build ${{ steps.parameter.outputs.PARAMETER }}
     shell: bash
     working-directory: ${{ inputs.working-directory }}
 
   - name: test code
-    run: cargo test ${{ id.parameter }}
+    run: cargo test ${{ steps.parameter.outputs.PARAMETER }}
     shell: bash
     working-directory: ${{ inputs.working-directory }}
       
