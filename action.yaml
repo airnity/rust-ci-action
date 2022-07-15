@@ -41,7 +41,7 @@ runs:
     id: parameter
     
   - name: check code
-    run: cargo check --verbose --jobs 1
+    run: cargo check --verbose
     shell: bash
     working-directory: ${{ inputs.working-directory }}
 
@@ -51,22 +51,22 @@ runs:
     working-directory: ${{ inputs.working-directory }}
 
   - name: clipy check
-    run: cargo clippy --verbose --jobs 1 -- -D warnings
+    run: cargo clippy --verbose -- -D warnings
     shell: bash
     working-directory: ${{ inputs.working-directory }}
 
   - name: build code
-    run: cargo build  --verbose --jobs 1  ${{ steps.parameter.outputs.PARAMETER }}
+    run: cargo build  --verbose ${{ steps.parameter.outputs.PARAMETER }}
     shell: bash
     working-directory: ${{ inputs.working-directory }}
 
   - name: test code
-    run: cargo test  --verbose --jobs 1  ${{ steps.parameter.outputs.PARAMETER }}
+    run: cargo test  --verbose  ${{ steps.parameter.outputs.PARAMETER }}
     shell: bash
     working-directory: ${{ inputs.working-directory }}
       
   - name: bench code
-    run: cargo bench  --verbose --jobs 1 
+    run: cargo bench  --verbose
     shell: bash
     working-directory: ${{ inputs.working-directory }}
   
