@@ -31,11 +31,13 @@ runs:
   - name: Set extra parameter
     shell: bash
     run: |
+      echo "/home/runner/.cargo/bin" >> $GITHUB_PATH
       if [[ ${{ inputs.release }} == "True" ]]; then
         echo "::set-output name=PARAMETER:: --release"
       else
         echo "::set-output name=PARAMETER:: "
       fi
+
     id: parameter
     
   - name: check code
