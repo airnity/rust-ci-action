@@ -31,7 +31,7 @@ runs:
   - name: Set extra parameter
     shell: bash
     run: |
-      if [ ${{ inputs.release }} == "True"]; then
+      if [[ ${{ inputs.release }} == "True" ]]; then
         echo "::set-output name=PARAMETER:: --release"
       else
         echo "::set-output name=PARAMETER:: "
