@@ -1,0 +1,70 @@
+name: 'Rust CI'
+description: 'Runs Rust compile, test, bench commands'
+inputs:
+  release:
+    description: 'Wether to run mix test or not'
+    required: false
+    default: 'False'
+  working-directory:
+    description: 'Working directory'
+    required: false
+    default: '.'
+  build-bench-key-suffix:
+    description: "Suffix to add to the bench cache key"
+    required: false
+    default: ""
+
+runs:
+  using: 'composite'
+  steps:
+
+  - name: Restore benches cache
+    id: mix-build-dep-cache
+    uses: actions/cache@v2
+    with:
+      path: |
+        ${{inputs.working-directory}}/benches
+      key: ${{ runner.os }}-mix-build-dep-${{ hashFiles(env.HASH_FILES_PATH) }}${{ inputs.build-cache-key-suffix }}
+    env:
+      HASH_FILES_PATH: "${{inputs.working-directory}}/Cargo.lock"
+  
+  - name: Set extra parameter
+    shell: bash
+    run: |
+      if [ ${{ inputs.release }} == "True"]; then
+        echo " --release"
+      else
+        echo ""
+      fi
+    id: parameter
+    
+  - name: check code
+    run: cargo check
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+
+  - name: check format
+    run: cargo fmt -- --check
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+
+  - name: clipy check
+    run: cargo clippy -- -D warnings
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+
+  - name: build code
+    run: cargo build ${{ id.parameter }}
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+
+  - name: test code
+    run: cargo test ${{ id.parameter }}
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+      
+  - name: bench code
+    run: cargo bench
+    shell: bash
+    working-directory: ${{ inputs.working-directory }}
+  
